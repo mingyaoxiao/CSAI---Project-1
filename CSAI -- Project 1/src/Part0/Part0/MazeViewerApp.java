@@ -1,6 +1,8 @@
 package Part0;
 
 import java.io.Console;
+import java.io.File;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class MazeViewerApp {
@@ -54,7 +56,18 @@ public class MazeViewerApp {
 			int choice = s.nextInt();
 			switch(choice) {
 			case 1:
-				viewMazesState("");
+				reentry:
+				while(true) {
+					System.out.println("Please input the path to the folder:");
+					String folderPath = s.nextLine();
+					Optional<File> dirOrErr = FileHelper.returnEmptyOrValidDirectory(folderPath);
+					if(dirOrErr.isPresent()) viewMazesState(folderPath);
+					else {
+						System.out.println("Invalid folder option. Press 1 to attempt again.");
+						int reentry = s.nextInt();
+						if(reentry != 1) break reentry;
+					}
+				}
 				break;
 			case 2:
 				s.close();
@@ -66,9 +79,18 @@ public class MazeViewerApp {
 		}
 	}
 
-	private static void viewMazesState(String filepath) {
+	private static void displayMaze(Maze currentMaze) {
+		if(currentMaze == null) {
+			System.out.println("There are no more mazes to display in this direction.");
+			return;
+		}
+		Object render = currentMaze.getRender();
+		System.out.println(render.toString());
+	}
+	
+	private static void viewMazesState(String folderPath) {
 		MazeViewer mV = new MazeViewer();
-		mV.loadMazes(filepath);
+		mV.loadMazes(folderPath);
 		Maze currentMaze = mV.nextDisplay();
 		if(currentMaze == null) {
 			System.out.println("No mazes in this folder.");
@@ -85,11 +107,13 @@ public class MazeViewerApp {
 			int choice = s.nextInt();
 			switch(choice) {
 			case 1:
-				viewMazesState("");
+				currentMaze = mV.prevDisplay();
+				displayMaze(currentMaze);
 				break;
 			case 2:
 				currentMaze = mV.nextDisplay();
-				return;
+				displayMaze(currentMaze);
+				break;
 			case 3:
 				s.close();
 				return;

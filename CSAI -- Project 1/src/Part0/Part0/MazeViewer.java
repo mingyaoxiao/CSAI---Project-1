@@ -16,7 +16,7 @@ public class MazeViewer {
 	}
 	
 	public void loadMazes(String folderLocation) {
-		File folder = new File("F:/Path");
+		File folder = new File(folderLocation);
 		if(!folder.isDirectory()) return;
 	    File[] files = folder.listFiles();
 	    for (File file : files)
