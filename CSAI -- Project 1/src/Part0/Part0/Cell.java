@@ -20,7 +20,11 @@ public class Cell {
 		this.status = Unblocked;
 	}
 	
-	private Cell moveToNeighbor(MoveDirection direction) {
+	public Cell peek(MoveDirection direction) {
+		return moveToNeighbor(direction);
+	}
+	
+	public Cell moveToNeighbor(MoveDirection direction) {
 		
 		int[] newCoordinates = new int[2];
 		int xMove = 0;
