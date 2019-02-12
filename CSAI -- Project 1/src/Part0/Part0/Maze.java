@@ -18,7 +18,7 @@ public class Maze implements Serializable{
 	}
 	
 	public void renderCells() {
-		renderedView = new Object();
+		renderedView = MazeRenderer.renderMaze(this);
 	}
 	
 	private void initializeBlankMaze() {
@@ -29,9 +29,22 @@ public class Maze implements Serializable{
 		}
 	}
 	
-	public static Maze loadMaze(String filepath) {
-		return new Maze(0,0);
-		//Function Stub
+	public static Maze loadMaze(String filePath) {
+		ObjectInputStream mazeReader = null;
+		try {
+			mazeReader = new ObjectInputStream(new FileInputStream(filePath));
+			Maze readMaze = (Maze) mazeReader.readObject();
+			mazeReader.close();
+			return readMaze;
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				mazeReader.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			return null;
+		}
 	}
 	
 	public void saveMaze() {
