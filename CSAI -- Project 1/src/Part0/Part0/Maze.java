@@ -7,6 +7,7 @@ public class Maze implements Serializable{
 	public int size[] = new int[2];
 	public Object renderedView;
 	public Cell[][] cells;
+	public static final String mazeExtension = "maze";
 	
 	public Cell getCellAtCoordinates(int x, int y) {
 		return null;
