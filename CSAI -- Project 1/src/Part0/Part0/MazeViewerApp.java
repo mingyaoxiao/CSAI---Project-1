@@ -1,6 +1,5 @@
 package Part0;
 
-import java.io.Console;
 import java.io.File;
 import java.util.Optional;
 import java.util.Scanner;
@@ -54,6 +53,7 @@ public class MazeViewerApp {
 			System.out.println("2) Exit");
 			
 			int choice = s.nextInt();
+			s.nextLine();
 			switch(choice) {
 			case 1:
 				reentry:
@@ -64,13 +64,12 @@ public class MazeViewerApp {
 					if(dirOrErr.isPresent()) viewMazesState(folderPath);
 					else {
 						System.out.println("Invalid folder option. Press 1 to attempt again.");
-						int reentry = s.nextInt();
-						if(reentry != 1) break reentry;
+						String reentry = s.nextLine();
+						if(reentry == "1") break reentry;
 					}
 				}
 				break;
 			case 2:
-				s.close();
 				return;
 			default:
 				System.out.println("Invalid option.");
@@ -115,7 +114,6 @@ public class MazeViewerApp {
 				displayMaze(currentMaze);
 				break;
 			case 3:
-				s.close();
 				return;
 			default:
 				System.out.println("Invalid option.");
