@@ -8,16 +8,6 @@ public class MazeViewer {
 		
 	}
 	
-	public String getExtension(String fileName) {
-		String extension = "";
-
-		int i = fileName.lastIndexOf('.');
-		if (i > 0) {
-		    extension = fileName.substring(i+1);
-		}
-		return extension;
-	}
-	
 	public void loadMazes(String folderLocation) {
 	//Will call loadAndAddMaze for each maze file it encounters
 		File folder = new File("F:/Path");
