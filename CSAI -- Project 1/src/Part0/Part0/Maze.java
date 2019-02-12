@@ -45,7 +45,7 @@ public class Maze implements Serializable{
 	public static Maze loadMaze(String filePath) {
 		ObjectInputStream mazeReader = null;
 		try {
-			mazeReader = new ObjectInputStream(new FileInputStream(filePath + Maze.mazeExtension));
+			mazeReader = new ObjectInputStream(new FileInputStream(filePath));
 			Maze readMaze = (Maze) mazeReader.readObject();
 			mazeReader.close();
 			return readMaze;
