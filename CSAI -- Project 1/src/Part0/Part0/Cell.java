@@ -53,7 +53,7 @@ public class Cell implements Serializable{
 				break;
 		}
 		
-		newCoordinates[0] += xMove; newCoordinates[1] += yMove;
+		newCoordinates[0] += yMove; newCoordinates[1] += xMove;
 		return parentMaze.getCellAtCoordinates(newCoordinates);
 	}
 }
