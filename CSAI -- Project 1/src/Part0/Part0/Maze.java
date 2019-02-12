@@ -5,7 +5,7 @@ import java.io.*;
 public class Maze implements Serializable{
 	private static final long serialVersionUID = -2585827010147174704L;
 	public int size[] = new int[2];
-	public Object renderedView;
+	private Object renderedView;
 	public Cell[][] cells;
 	public static final String mazeExtension = "maze";
 	
@@ -18,7 +18,10 @@ public class Maze implements Serializable{
 		initializeBlankMaze();
 		renderCells();
 	}
-	
+	public Object getRender() {
+		renderCells();
+		return this.renderedView;
+	}
 	public void renderCells() {
 		renderedView = MazeRenderer.renderMaze(this);
 	}
