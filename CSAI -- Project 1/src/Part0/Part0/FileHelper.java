@@ -19,9 +19,10 @@ public class FileHelper {
 	public static String getName(String fileName) {
 		String name = "";
 
-		int i = fileName.lastIndexOf('.');
-		if (i > 0) {
-		    name = fileName.substring(0,i);
+		int i = fileName.lastIndexOf('\\');
+		int j = fileName.lastIndexOf('.');
+		if (i > 0 && j > 0) {
+		    name = fileName.substring(i+1,j);
 		}
 		return name;
 	}
