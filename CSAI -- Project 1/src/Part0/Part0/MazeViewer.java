@@ -4,15 +4,17 @@ import java.util.*;
 public class MazeViewer {
 	List<MazeDisplay> loadedMazeDisplays;
 	ListIterator<MazeDisplay> mazeIterator;
+	boolean wentRight = false;
+	boolean wentLeft = false;
 	
 	public MazeViewer() {
 		loadedMazeDisplays = new ArrayList<MazeDisplay>();
 		mazeIterator = loadedMazeDisplays.listIterator();
 	}
 	
-	public void loadThenAddMaze(String name) {
-		Maze readMaze = Maze.loadMaze(FileHelper.baseUrl + "\\" + name);
-		mazeIterator.add(new MazeDisplay(name,readMaze));
+	public void loadThenAddMaze(String path) {
+		Maze readMaze = Maze.loadMaze(path);
+		mazeIterator.add(new MazeDisplay(FileHelper.getName(path),readMaze));
 	}
 	
 	public void loadMazes(String folderLocation) {
@@ -26,7 +28,7 @@ public class MazeViewer {
 	        {
 	    		if(file.canRead()) {
 	    			if(file.isFile()) {
-	    				loadThenAddMaze(FileHelper.getName(file.getPath()));
+	    				loadThenAddMaze(file.getPath());
 	    			}
 	    		}
 	        }
@@ -34,12 +36,32 @@ public class MazeViewer {
 	}
 	
 	public MazeDisplay nextDisplay() {
-		if(mazeIterator.hasNext()) return mazeIterator.next();
+		if(this.wentLeft) {
+			this.wentLeft = false;
+			mazeIterator.next();
+		}
+		if(mazeIterator.hasNext()) {
+			this.wentRight = true;
+			return mazeIterator.next();
+		}
+		else {
+			this.wentRight = false;
+		}
 		return null;
 	}
 	
 	public MazeDisplay prevDisplay() {
-		if(mazeIterator.hasPrevious()) return mazeIterator.previous();
+		if(this.wentRight) {
+			this.wentRight = false;
+			mazeIterator.previous();
+		}
+		if(mazeIterator.hasPrevious()) {
+			this.wentLeft = true;
+			return mazeIterator.previous();
+		}
+		else {
+			this.wentLeft = false;
+		}
 		return null;
 	}
 	
