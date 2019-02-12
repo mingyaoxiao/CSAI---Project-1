@@ -26,6 +26,7 @@ public class Maze implements Serializable{
 		renderCells();
 		return this.renderedView;
 	}
+	
 	public void renderCells() {
 		renderedView = MazeRenderer.renderMaze(this);
 	}
