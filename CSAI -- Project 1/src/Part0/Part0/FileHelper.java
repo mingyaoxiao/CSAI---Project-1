@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Optional;
 
 public class FileHelper {
+	public static String baseUrl = "src/Part0/Part0/"; 
+	
 	public static String getExtension(String fileName) {
 		String extension = "";
 
