@@ -1,6 +1,6 @@
 package Part0;
 
-public class Maze {
+public class Maze implements Serializable{
 	public int size[] = new int[2];
 	public Object renderedView;
 	public Cell[][] cells;
