@@ -9,10 +9,6 @@ public class Maze implements Serializable{
 	public Cell[][] cells;
 	public static final String mazeExtension = "maze";
 	
-	public Cell getCellAtCoordinates(int x, int y) {
-		return null;
-	}
-	
 	private Maze(int sizeX, int sizeY) {
 		size = new int[] {sizeX, sizeY};
 		initializeBlankMaze();
@@ -39,7 +35,7 @@ public class Maze implements Serializable{
 		for(int i = 0; i < size[0]; i++) {
 			for(int j = 0; j < size[1]; j++) {
 				if(this != null) {
-					cells[i][j] = new Cell(this);
+					cells[i][j] = new Cell(this, i, j);
 				}
 			}
 		}
@@ -80,9 +76,12 @@ public class Maze implements Serializable{
 	}
 	
 	public Cell getCellAtCoordinates(int[] coordinates) {
-		int x = coordinates[0];
-		int y = coordinates[1];
+		return getCellAtCoordinates(coordinates[0], coordinates[1]);
+	}
+	
+	public Cell getCellAtCoordinates(int x, int y) {
 		if(x == -1 ||y  == -1) return null;
+		if(x >= size[0] || y >= size[1]) return null;
 		return cells[x][y];
 	}
 }
