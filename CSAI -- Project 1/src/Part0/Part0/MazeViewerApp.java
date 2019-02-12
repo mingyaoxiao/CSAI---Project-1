@@ -78,24 +78,28 @@ public class MazeViewerApp {
 		}
 	}
 
-	private static void displayMaze(Maze currentMaze) {
-		if(currentMaze == null) {
+	private static void displayMaze(MazeDisplay currentDisplay) {
+		if(currentDisplay == null) {
 			System.out.println("There are no more mazes to display in this direction.");
 			return;
 		}
-		Object render = currentMaze.getRender();
+		Object render = currentDisplay.maze.getRender();
+		System.out.println("\n");
+		System.out.println("Now displaying: " + currentDisplay.fileName);
 		System.out.println(render.toString());
+		System.out.println("\n");
+		System.out.println("\n");
 	}
 	
 	private static void viewMazesState(String folderPath) {
 		MazeViewer mV = new MazeViewer();
 		mV.loadMazes(folderPath);
-		Maze currentMaze = mV.nextDisplay();
-		if(currentMaze == null) {
+		mV.resetCursor();
+		if(mV.loadedMazeDisplays.size() < 1) {
 			System.out.println("No mazes in this folder.");
 			return;
 		}
-		
+		MazeDisplay currentMaze = null;
 		while(true) {
 			System.out.println("Welcome to the Maze Viewer module.");
 			System.out.println("Please choose an option:");
@@ -106,11 +110,11 @@ public class MazeViewerApp {
 			int choice = s.nextInt();
 			switch(choice) {
 			case 1:
-				currentMaze = mV.prevDisplay();
+				currentMaze = mV.nextDisplay();
 				displayMaze(currentMaze);
 				break;
 			case 2:
-				currentMaze = mV.nextDisplay();
+				currentMaze = mV.prevDisplay();
 				displayMaze(currentMaze);
 				break;
 			case 3:
