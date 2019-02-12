@@ -19,4 +19,14 @@ public class TreeNode {
 	public void appendChild(TreeNode childNode) {
 		this.children.add(childNode);
 	}
+	
+	public TreeNode nextChild() {
+		return parent;
+		
+	}
+	
+	public TreeNode prevChild() {
+		return parent;
+		
+	}
 }
