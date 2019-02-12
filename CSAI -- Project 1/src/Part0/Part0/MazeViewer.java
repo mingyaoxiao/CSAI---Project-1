@@ -2,17 +2,17 @@ package Part0;
 import java.io.File;
 import java.util.*;
 public class MazeViewer {
-	List<Maze> loadedMazes;
-	ListIterator<Maze> mazeIterator;
+	List<MazeDisplay> loadedMazeDisplays;
+	ListIterator<MazeDisplay> mazeIterator;
 	
 	public MazeViewer() {
-		loadedMazes = new ArrayList<Maze>();
-		mazeIterator = loadedMazes.listIterator();
+		loadedMazeDisplays = new ArrayList<MazeDisplay>();
+		mazeIterator = loadedMazeDisplays.listIterator();
 	}
 	
-	public void loadThenAddMaze(String fileLocation) {
-		Maze readMaze = Maze.loadMaze(fileLocation);
-		mazeIterator.add(readMaze);
+	public void loadThenAddMaze(String name) {
+		Maze readMaze = Maze.loadMaze(FileHelper.baseUrl + "\\" + name);
+		mazeIterator.add(new MazeDisplay(name,readMaze));
 	}
 	
 	public void loadMazes(String folderLocation) {
@@ -33,17 +33,17 @@ public class MazeViewer {
 	    }
 	}
 	
-	public Maze nextDisplay() {
+	public MazeDisplay nextDisplay() {
 		if(mazeIterator.hasNext()) return mazeIterator.next();
 		return null;
 	}
 	
-	public Maze prevDisplay() {
+	public MazeDisplay prevDisplay() {
 		if(mazeIterator.hasPrevious()) return mazeIterator.previous();
 		return null;
 	}
 	
 	public void resetCursor() {
-		this.mazeIterator = this.loadedMazes.listIterator();
+		this.mazeIterator = this.loadedMazeDisplays.listIterator();
 	}
 }
