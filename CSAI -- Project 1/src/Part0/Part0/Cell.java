@@ -1,6 +1,12 @@
 package Part0;
 import static Part0.CellStatus.*;
-public class Cell {
+
+import java.io.Serializable;
+public class Cell implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4687250664459748573L;
 	public CellStatus status = Unblocked;
 	public int[] coordinates = {0,0};
 	private Maze parentMaze;
