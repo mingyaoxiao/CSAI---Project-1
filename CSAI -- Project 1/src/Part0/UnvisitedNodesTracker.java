@@ -1,12 +1,22 @@
 public class UnvisitedNodesTracker {
-	int[][] MazeModel;
-	public UnvisitedNodesTracker(int[][] size) {
-		MazeModel = new int[size[0]][size[1]];
+	boolean[][] MazeModel;
+	int sizeX;
+	int sizeY;
+	public UnvisitedNodesTracker(int sizeX, int sizeY) {
+		MazeModel = new int[sizeX][sizeY];
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
 	}
-	public void markNodeAsVisited(int[] coordinates) {
-		
+	public void markNodeAsVisited(int x, int y) {
+		MazeModel[x][y] = true;
 	}
 	public int[] getUnvisitedNode() {
-		return {0,0};
+		for(int i = 0; i < sizeX; i++) {
+			for(int j = 0; j < sizeX; j++) {
+				if(MazeModel[i][j]) {
+					return {i,j};
+				}
+			}
+		}
 	}
 }
