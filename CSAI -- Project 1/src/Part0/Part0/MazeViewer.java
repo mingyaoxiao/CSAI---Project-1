@@ -21,16 +21,12 @@ public class MazeViewer {
 	    File[] files = folder.listFiles();
 	    for (File file : files)
 	    {
-	        /*if (file.isFile() && FileHelper.getExtension(file.getName()) == Maze.mazeExtension)
-	        {
-	            loadThenAddMaze(file.getPath());
-	        }*/
 	    	System.out.println(file.getName() + " -- " + FileHelper.getExtension(file.getName()));
 	    	if (FileHelper.getExtension(file.getName()).equals(Maze.mazeExtension))
 	        {
 	    		if(file.canRead()) {
 	    			if(file.isFile()) {
-	    				loadThenAddMaze(file.getPath());
+	    				loadThenAddMaze(FileHelper.getName(file.getPath()));
 	    			}
 	    		}
 	        }
@@ -45,5 +41,9 @@ public class MazeViewer {
 	public Maze prevDisplay() {
 		if(mazeIterator.hasPrevious()) return mazeIterator.previous();
 		return null;
+	}
+	
+	public void resetCursor() {
+		this.mazeIterator = this.loadedMazes.listIterator();
 	}
 }
