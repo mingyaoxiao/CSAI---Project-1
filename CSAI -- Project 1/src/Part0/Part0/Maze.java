@@ -7,7 +7,7 @@ public class Maze implements Serializable{
 	public int size[] = new int[2];
 	private Object renderedView;
 	public Cell[][] cells;
-	public static final String mazeExtension = "maze";
+	public static final String mazeExtension = ".maze";
 	
 	private Maze(int sizeX, int sizeY) {
 		size = new int[] {sizeX, sizeY};
@@ -45,7 +45,7 @@ public class Maze implements Serializable{
 	public static Maze loadMaze(String filePath) {
 		ObjectInputStream mazeReader = null;
 		try {
-			mazeReader = new ObjectInputStream(new FileInputStream(filePath + "." + Maze.mazeExtension));
+			mazeReader = new ObjectInputStream(new FileInputStream(filePath + Maze.mazeExtension));
 			Maze readMaze = (Maze) mazeReader.readObject();
 			mazeReader.close();
 			return readMaze;
@@ -63,7 +63,7 @@ public class Maze implements Serializable{
 	public void saveMaze(String filePath) {
 		ObjectOutputStream mazeWriter = null;
 		try {
-			mazeWriter = new ObjectOutputStream(new FileOutputStream(filePath+ "." + Maze.mazeExtension));
+			mazeWriter = new ObjectOutputStream(new FileOutputStream(filePath + Maze.mazeExtension));
 			mazeWriter.writeObject(this);
 			mazeWriter.close();
 		} catch (Exception e) {
