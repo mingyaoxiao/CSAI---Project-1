@@ -11,9 +11,19 @@ public class FileHelper {
 
 		int i = fileName.lastIndexOf('.');
 		if (i > 0) {
-		    extension = fileName.substring(i+1);
+		    extension = fileName.substring(i);
 		}
 		return extension;
+	}
+	
+	public static String getName(String fileName) {
+		String name = "";
+
+		int i = fileName.lastIndexOf('.');
+		if (i > 0) {
+		    name = fileName.substring(0,i);
+		}
+		return name;
 	}
 	
 	public static Optional<File> returnEmptyOrValidDirectory(String filePath){
