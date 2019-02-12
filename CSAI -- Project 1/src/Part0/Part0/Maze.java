@@ -3,6 +3,7 @@ package Part0;
 import java.io.*;
 
 public class Maze implements Serializable{
+	private static final long serialVersionUID = -2585827010147174704L;
 	public int size[] = new int[2];
 	public Object renderedView;
 	public Cell[][] cells;
@@ -64,6 +65,9 @@ public class Maze implements Serializable{
 	}
 	
 	public Cell getCellAtCoordinates(int[] coordinates) {
-		return new Cell(this); //Function Stub
+		int x = coordinates[0];
+		int y = coordinates[1];
+		if(x == -1 ||y  == -1) return null;
+		return cells[x][y];
 	}
 }
