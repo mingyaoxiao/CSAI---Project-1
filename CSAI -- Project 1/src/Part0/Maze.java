@@ -5,6 +5,8 @@ public class Maze implements Serializable{
 	public Object renderedView;
 	public Cell[][] cells;
 	
+	public getU
+	
 	public Maze(int sizeX, int sizeY) {
 		size = new int[] {sizeX, sizeY};
 		initializeBlankMaze();
@@ -23,20 +25,16 @@ public class Maze implements Serializable{
 		}
 	}
 	
-	public static Maze LoadMaze(String filepath) {
+	public static Maze loadMaze(String filepath) {
 		return new Maze(0,0);
 		//Function Stub
 	}
 	
-	public void SaveMaze() {
+	public void saveMaze() {
 		return; //Function Stub
 	}
 	
 	public Cell getCellAtCoordinates(int[] coordinates) {
 		return new Cell(this); //Function Stub
-	}
-	
-	public Cell[][] dumpMazeArray(){
-		return cells;
 	}
 }
