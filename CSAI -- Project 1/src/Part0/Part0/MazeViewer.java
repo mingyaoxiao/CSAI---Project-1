@@ -3,7 +3,7 @@ import java.util.*;
 public class MazeViewer {
 	List<Maze> loadedMazes;
 	
-	public void loadAndAddMaze(String fileLocation) {
+	public void loadThenAddMaze(String fileLocation) {
 		
 	}
 	
