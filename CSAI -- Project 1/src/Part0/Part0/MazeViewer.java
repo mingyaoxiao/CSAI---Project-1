@@ -21,7 +21,7 @@ public class MazeViewer {
 	    File[] files = folder.listFiles();
 	    for (File file : files)
 	    {
-	    	System.out.println(file.getName() + " -- " + FileHelper.getExtension(file.getName()));
+	    	//System.out.println(file.getName() + " -- " + FileHelper.getExtension(file.getName()));
 	    	if (FileHelper.getExtension(file.getName()).equals(Maze.mazeExtension))
 	        {
 	    		if(file.canRead()) {

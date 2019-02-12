@@ -85,10 +85,11 @@ public class MazeViewerApp {
 		}
 		Object render = currentDisplay.maze.getRender();
 		System.out.println("\n");
+		System.out.println("\n");
+		System.out.println("\n");
 		System.out.println("Now displaying: " + currentDisplay.fileName);
 		System.out.println(render.toString());
-		System.out.println("\n");
-		System.out.println("\n");
+		
 	}
 	
 	private static void viewMazesState(String folderPath) {
