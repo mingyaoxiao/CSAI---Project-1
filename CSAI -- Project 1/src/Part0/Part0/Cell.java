@@ -10,8 +10,10 @@ public class Cell implements Serializable{
 	public CellStatus status = Unblocked;
 	public int[] coordinates = {0,0};
 	private Maze parentMaze;
-	public Cell(Maze parentMaze) {
+	public Cell(Maze parentMaze, int xCoordinate, int yCoordinate) {
 		this.parentMaze = parentMaze;
+		coordinates[0] = xCoordinate;
+		coordinates[1] = yCoordinate;
 	}
 	
 	public int[] getCoordinates() {
@@ -32,7 +34,7 @@ public class Cell implements Serializable{
 	
 	public Cell moveToNeighbor(MoveDirection direction) {
 		
-		int[] newCoordinates = new int[2];
+		int[] newCoordinates = new int[] {this.coordinates[0], this.coordinates[1]};
 		int xMove = 0;
 		int yMove = 0;
 		
