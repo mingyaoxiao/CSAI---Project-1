@@ -47,8 +47,20 @@ public class Maze implements Serializable{
 		}
 	}
 	
-	public void saveMaze() {
-		return; //Function Stubs
+	public void saveMaze(String filePath) {
+		ObjectOutputStream mazeWriter = null;
+		try {
+			mazeWriter = new ObjectOutputStream(new FileOutputStream(filePath));
+			mazeWriter.writeObject(this);
+			mazeWriter.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				mazeWriter.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 	
 	public Cell getCellAtCoordinates(int[] coordinates) {
