@@ -1,12 +1,13 @@
+package Part0;
 import java.util.*;
 public class TreeNode {
 	Cell state;
 	MoveDirection action;
 	TreeNode parent;
 	int cost;
-	List<Cell> children;
+	List<TreeNode> children;
 	
-	public static generateInitialNode(Cell initialCell) {
+	public static TreeNode generateInitialNode(Cell initialCell) {
 		return new TreeNode(initialCell, null, null, 0);
 	}
 	public TreeNode(Cell state, MoveDirection action, TreeNode parent, int additionalCost) {

@@ -1,4 +1,5 @@
-
+package Part0;
+import java.util.*;
 public class MazeViewer {
 	List<Maze> loadedMazes;
 	

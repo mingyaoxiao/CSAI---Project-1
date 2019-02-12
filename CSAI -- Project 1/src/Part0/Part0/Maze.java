@@ -1,11 +1,15 @@
+
 package Part0;
+import java.io.*;
 
 public class Maze implements Serializable{
 	public int size[] = new int[2];
 	public Object renderedView;
 	public Cell[][] cells;
 	
-	public getU
+	public Cell getCellAtCoordinates(int x, int y) {
+		return null;
+	}
 	
 	public Maze(int sizeX, int sizeY) {
 		size = new int[] {sizeX, sizeY};
