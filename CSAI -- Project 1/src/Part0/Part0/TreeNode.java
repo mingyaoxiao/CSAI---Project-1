@@ -6,6 +6,8 @@ public class TreeNode {
 	TreeNode parent;
 	int cost;
 	List<TreeNode> children;
+	ListIterator<TreeNode> childrenIterator;
+	private boolean firstTimeFetch = true;
 	
 	public static TreeNode generateInitialNode(Cell initialCell) {
 		return new TreeNode(initialCell, null, null, 0);
@@ -17,16 +19,28 @@ public class TreeNode {
 		this.cost = parent.cost + additionalCost;
 	}
 	public void appendChild(TreeNode childNode) {
-		this.children.add(childNode);
+		childrenIterator.add(childNode);
 	}
 	
 	public TreeNode nextChild() {
-		return parent;
+		if(firstTimeFetch) {
+			childrenIterator = children.listIterator();
+			this.firstTimeFetch = false;
+		}
+		if(childrenIterator.hasNext())
+		return childrenIterator.next();
 		
+		return null;
 	}
 	
 	public TreeNode prevChild() {
-		return parent;
+		if(firstTimeFetch) {
+			childrenIterator = children.listIterator();
+			this.firstTimeFetch = false;
+		}
+		if(childrenIterator.hasPrevious())
+		return childrenIterator.previous();
 		
+		return null;
 	}
 }
