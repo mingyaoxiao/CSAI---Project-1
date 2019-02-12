@@ -29,7 +29,12 @@ public class MazeViewer {
 	}
 	
 	public Maze nextDisplay() {
-		if(mazeIterator.hasNext())return mazeIterator.next();
+		if(mazeIterator.hasNext()) return mazeIterator.next();
+		return null;
+	}
+	
+	public Maze prevDisplay() {
+		if(mazeIterator.hasPrevious()) return mazeIterator.previous();
 		return null;
 	}
 }
