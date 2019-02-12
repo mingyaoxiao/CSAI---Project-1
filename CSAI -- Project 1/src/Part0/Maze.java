@@ -31,7 +31,7 @@ public class Maze implements Serializable{
 	}
 	
 	public void saveMaze() {
-		return; //Function Stub
+		return; //Function Stubs
 	}
 	
 	public Cell getCellAtCoordinates(int[] coordinates) {
