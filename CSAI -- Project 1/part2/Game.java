@@ -8,6 +8,8 @@ public class Game {
 	GameVisualization visualization;
 	
 	public Game(Maze maze) {
-		
+		this.trueMaze = maze;
+		this.awareMaze = maze.cloneMaze();
+		this.visualization = new GameVisualization(awareMaze);
 	}
 }
