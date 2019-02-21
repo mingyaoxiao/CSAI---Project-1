@@ -11,7 +11,7 @@ public class RepeatedAStarAgent {
 		this.game = game;
 	}
 	
-	public List<String> ComputePath(){
+	public List<String> ComputePath(L_Cell curr){
 		return null;
 	}
 	
@@ -20,11 +20,14 @@ public class RepeatedAStarAgent {
 	}
 	
 	public GameVisualization Run() {
+		L_Grid agent = new L_Grid(this.game.trueMaze, this);
+		agent.aStar();
 		return null;
 	}
 
-	public void addToVisualization(L_Cell curr) {
+	public void addToVisualization(L_Cell curr, List<int[]> newBlockedCells) {
 		// TODO Auto-generated method stub
-		
+		List<String> path = this.ComputePath(curr);
+		Execute(path);
 	}
 }
