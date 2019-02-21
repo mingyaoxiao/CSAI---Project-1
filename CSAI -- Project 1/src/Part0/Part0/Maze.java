@@ -7,6 +7,8 @@ public class Maze implements Serializable{
 	public int size[] = new int[2];
 	private Object renderedView;
 	public Cell[][] cells;
+	public int[] agentPos;
+	public int[] goalPos;
 	public static final String mazeExtension = ".maze";
 	
 	private Maze(int sizeX, int sizeY) {
@@ -40,6 +42,8 @@ public class Maze implements Serializable{
 				}
 			}
 		}
+		this.agentPos = new int[] {0,0};
+		this.goalPos = new int[] {size[0] - 1, size[1] - 1};
 	}
 	
 	public static Maze loadMaze(String filePath) {
@@ -84,5 +88,9 @@ public class Maze implements Serializable{
 		if(x == -1 ||y  == -1) return null;
 		if(x >= size[0] || y >= size[1]) return null;
 		return cells[x][y];
+	}
+	
+	public Maze cloneMaze() {
+		return null; //Remember to write this function
 	}
 }
