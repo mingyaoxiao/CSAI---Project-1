@@ -1,6 +1,8 @@
 package part2;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
 
 import static Part0.CellStatus.*;
@@ -12,6 +14,8 @@ public class L_Grid
 	public PriorityQueue<L_Cell> open;
 	public PriorityQueue<L_Cell> closed;
 	public RepeatedAStarAgent agent;
+	public int numberOfExpandedCells;
+	public List<int[]> newBlockedCells;
 	
 	L_Grid(Maze m, RepeatedAStarAgent agent){
 		this.agent = agent;
@@ -37,6 +41,7 @@ public class L_Grid
 		}
 		open = new PriorityQueue<L_Cell>(10, L_Cell.comp);
 		closed = new PriorityQueue<L_Cell>(10, L_Cell.comp);
+		newBlockedCells = new ArrayList<int[]>();
 	}
 	
 	L_Grid(String s) throws IOException 
@@ -96,6 +101,7 @@ public class L_Grid
 		{			
 			L_Cell state = open.poll();
 			closed.add(state);
+			this.numberOfExpandedCells++;
 			//up
 			if(state.yCoor > 0)
 			{
@@ -149,6 +155,7 @@ public class L_Grid
 			computePath();
 			if(open == null)
 			{
+				agent.addToVisualization(curr, newBlockedCells);
 				System.out.println("cannot reach target");
 				return;
 			}
@@ -157,16 +164,29 @@ public class L_Grid
 			{
 				//update action costs
 				if(ptr.yCoor > 0 && L_Grid[ptr.xCoor][ptr.yCoor - 1].isBlocked)
-					L_Grid[ptr.xCoor][ptr.yCoor - 1].actionRemoved = true;
+					{
+						L_Grid[ptr.xCoor][ptr.yCoor - 1].actionRemoved = true;
+						this.newBlockedCells.add(new int[] {ptr.xCoor, ptr.yCoor - 1} );
+					}
 				if(ptr.xCoor < 100 && L_Grid[ptr.xCoor + 1][ptr.yCoor].isBlocked)
-					L_Grid[ptr.xCoor + 1][ptr.yCoor].actionRemoved = true;
+					{
+						L_Grid[ptr.xCoor + 1][ptr.yCoor].actionRemoved = true;
+						this.newBlockedCells.add(new int[] {ptr.xCoor + 1, ptr.yCoor} );
+					}
 				if(ptr.yCoor < 100 && L_Grid[ptr.xCoor][ptr.yCoor + 1].isBlocked)
-					L_Grid[ptr.xCoor][ptr.yCoor + 1].actionRemoved = true;
+					{
+						L_Grid[ptr.xCoor][ptr.yCoor + 1].actionRemoved = true;
+						this.newBlockedCells.add(new int[] {ptr.xCoor, ptr.yCoor + 1} );
+					}
 				if(ptr.xCoor > 0 && L_Grid[ptr.xCoor - 1][ptr.yCoor].isBlocked)
-					L_Grid[ptr.xCoor - 1][ptr.yCoor].actionRemoved = true;
+					{
+						L_Grid[ptr.xCoor - 1][ptr.yCoor].actionRemoved = true;
+						this.newBlockedCells.add(new int[] {ptr.xCoor - 1, ptr.yCoor} );
+					}
 				ptr = ptr.next;
 			}
-			agent.addToVisualization(curr);
+			agent.addToVisualization(curr, newBlockedCells);
+			this.newBlockedCells.clear();
 			curr = ptr.prev;
 		}
 		System.out.println("reached the target");
