@@ -1,5 +1,5 @@
 package Part0;
 
 public enum CellStatus {
-	Unblocked, Blocked, AgentVisited, OnPath;
+	Unblocked, Blocked, Agent, Goal, OnPath;
 }
