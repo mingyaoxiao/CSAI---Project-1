@@ -155,11 +155,12 @@ public class L_Grid
 			computePath();
 			if(open == null)
 			{
-				agent.addToVisualization(curr, newBlockedCells);
+				agent.addToVisualization(null, null, null);
 				System.out.println("cannot reach target");
 				return;
 			}
 			L_Cell ptr = curr.next;
+			L_Cell agentStart = ptr;
 			while(ptr.xCoor != 100 && ptr.yCoor != 100 && !ptr.isBlocked)
 			{
 				//update action costs
@@ -185,7 +186,8 @@ public class L_Grid
 					}
 				ptr = ptr.next;
 			}
-			agent.addToVisualization(curr, newBlockedCells);
+			L_Cell agentEnd = ptr.prev;
+			agent.addToVisualization(agentStart, agentEnd, newBlockedCells);
 			this.newBlockedCells.clear();
 			curr = ptr.prev;
 		}
