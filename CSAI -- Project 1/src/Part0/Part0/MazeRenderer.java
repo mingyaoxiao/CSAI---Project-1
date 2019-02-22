@@ -19,8 +19,8 @@ public class MazeRenderer {
 					renderString.append("G");
 					continue;
 				}
-				if (currentCell.status == Blocked) renderString.append(" \u25A0 ");
-				else if (currentCell.status == Unblocked) renderString.append(" \u25A1 ");
+				if (currentCell.status == Blocked) renderString.append("\u25A0");
+				else if (currentCell.status == Unblocked) renderString.append("\u25A1");
 			}
 			renderString.append("\n");
 		}
