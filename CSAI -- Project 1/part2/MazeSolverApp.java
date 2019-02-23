@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import Part0.Maze;
+import static part2.AlgoMode.*;
 
 public class MazeSolverApp {
 	public static void main(String[] args) {
@@ -26,8 +27,9 @@ public class MazeSolverApp {
 		Game g = new Game(maze);
 		RepeatedAStarAgent agent = new RepeatedAStarAgent(g);
 		// run it on the maze
-		List<String> history = agent.Run();
-		
+		char version = 'f';
+		char tiebreaker = 'f';
+		List<String> history = agent.Run(version, tiebreaker);
 		
 		// display the visualizatin
 		//if(agent.incompletable == false) {

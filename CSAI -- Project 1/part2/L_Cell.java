@@ -1,5 +1,4 @@
 package part2;
-
 import java.util.Comparator;
 
 public class L_Cell 
@@ -19,15 +18,43 @@ public class L_Cell
 		next = null;
 	}
 	
-	public static Comparator<L_Cell> comp = new Comparator<L_Cell>()
+	public static Comparator<L_Cell> larger = new Comparator<L_Cell>()
 	{
 		public int compare(L_Cell a, L_Cell b)
 		{
-			if((a.gVal + a.hVal) > (b.gVal + b.hVal))
-				return 1;
 			if((a.gVal + a.hVal) < (b.gVal + b.hVal))
 				return -1;
-			return 0;
+			else if((a.gVal + a.hVal) > (b.gVal + b.hVal))
+				return 1;
+			else
+			{
+				if(a.gVal > b.gVal)
+					return -1;
+				else if(a.gVal < b.gVal)
+					return 1;
+				else
+					return 0;
+			}
+		}
+	};
+	
+	public static Comparator<L_Cell> smaller = new Comparator<L_Cell>()
+	{
+		public int compare(L_Cell a, L_Cell b)
+		{
+			if((a.gVal + a.hVal) < (b.gVal + b.hVal))
+				return -1;
+			else if((a.gVal + a.hVal) > (b.gVal + b.hVal))
+				return 1;
+			else
+			{
+				if(a.gVal < b.gVal)
+					return -1;
+				else if(a.gVal > b.gVal)
+					return 1;
+				else
+					return 0;
+			}
 		}
 	};
 }

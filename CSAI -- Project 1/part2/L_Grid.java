@@ -20,7 +20,7 @@ public class L_Grid
 	int y_size;
 	Maze m;
 	//src/maze0.maze.maze
-	L_Grid(Maze m, RepeatedAStarAgent agent){
+	L_Grid(char ver, char tie, Maze m, RepeatedAStarAgent agent){
 		this.m = m;
 		this.agent = agent;
 		x_size = m.size[0];
@@ -42,38 +42,79 @@ public class L_Grid
 				L_Grid[i][j].xCoor = i;
 				L_Grid[i][j].yCoor = j;
 				L_Grid[i][j].gVal = Double.POSITIVE_INFINITY;
-				L_Grid[i][j].hVal = (x_size - i) + (y_size - j);
+				switch(ver)
+				{
+					case 'b':
+						L_Grid[i][j].hVal = i + j;
+						break;
+					case 'a':
+					case 'f':
+					default:
+						L_Grid[i][j].hVal = (100 - i) + (100 - j);
+						break;
+				}
 				L_Grid[i][j].actionRemoved = false;
 			}
 		}
-		open = new PriorityQueue<L_Cell>(10, L_Cell.comp);
-		closed = new PriorityQueue<L_Cell>(10, L_Cell.comp);
+		switch(tie)
+		{
+			case 's':
+				open = new PriorityQueue<L_Cell>(10, L_Cell.smaller);
+				closed = new PriorityQueue<L_Cell>(10, L_Cell.smaller);
+				break;
+			case 'l':
+			default:
+				open = new PriorityQueue<L_Cell>(10, L_Cell.larger);
+				closed = new PriorityQueue<L_Cell>(10, L_Cell.larger);
+				break;
+		}
 		newBlockedCells = new ArrayList<int[]>();
 	}
-	
-	L_Grid(String s) throws IOException 
+	/*
+	L_Grid(char ver, char tie, String s) throws IOException 
 	{		
-		L_Grid = new L_Cell[101][101];
+		grid = new Cell[101][101];
 		FileReader fr = new FileReader(s);
 		for(int i = 0; i < 101; ++i) 
 		{			
 			for(int j = 0; j < 101; ++j) 
 			{				
 				int ch = fr.read();
-				L_Grid[i][j] = new L_Cell();
-				L_Grid[i][j].isBlocked = ((char) ch == '1') ? true : false;
-				L_Grid[i][j].xCoor = i;
-				L_Grid[i][j].yCoor = j;
-				L_Grid[i][j].gVal = Double.POSITIVE_INFINITY;
-				L_Grid[i][j].hVal = (x_size - i) + (x_size - j);
-				L_Grid[i][j].actionRemoved = false;
+				grid[i][j] = new Cell();
+				grid[i][j].isBlocked = ((char) ch == '1') ? true : false;
+				grid[i][j].xCoor = i;
+				grid[i][j].yCoor = j;
+				grid[i][j].gVal = Double.POSITIVE_INFINITY;
+				switch(ver)
+				{
+					case 'b':
+						grid[i][j].hVal = i + j;
+						break;
+					case 'a':
+					case 'f':
+					default:
+						grid[i][j].hVal = (100 - i) + (100 - j);
+						break;
+				}
+				grid[i][j].actionRemoved = false;
 			}
 			fr.read();
 		}
 		fr.close();
-		open = new PriorityQueue<L_Cell>(10, L_Cell.comp);
-		closed = new PriorityQueue<L_Cell>(10, L_Cell.comp);
+		switch(tie)
+		{
+			case 's':
+				open = new PriorityQueue<Cell>(10, Cell.smaller);
+				closed = new PriorityQueue<Cell>(10, Cell.smaller);
+				break;
+			case 'l':
+			default:
+				open = new PriorityQueue<Cell>(10, Cell.larger);
+				closed = new PriorityQueue<Cell>(10, Cell.larger);
+				break;
+		}
 	}
+	*/
 	
 	public void printL_Grid() 
 	{		
@@ -87,13 +128,22 @@ public class L_Grid
 		}
 	}
 
-	public void action(int nextX, int nextY, L_Cell prevL_Cell)
+	public void action(char ver, int nextX, int nextY, L_Cell prevL_Cell)
 	{
 		if(L_Grid[nextX][nextY].gVal > prevL_Cell.gVal + 1)
 		{					
 			L_Grid[nextX][nextY].gVal = prevL_Cell.gVal + 1;
-			L_Grid[nextX][nextY].prev = L_Grid[prevL_Cell.xCoor][prevL_Cell.yCoor];
-			prevL_Cell.next = L_Grid[nextX][nextY];
+			switch(ver)
+			{
+				case 'b':
+					L_Grid[nextX][nextY].next = L_Grid[prevL_Cell.xCoor][prevL_Cell.yCoor];
+					break;
+				case 'a':
+				case 'f':
+				default:
+					L_Grid[nextX][nextY].prev = L_Grid[prevL_Cell.xCoor][prevL_Cell.yCoor];
+					break;
+			}
 			if(open.contains(L_Grid[nextX][nextY])) 
 			{						
 				open.remove(L_Grid[nextX][nextY]);
@@ -102,9 +152,10 @@ public class L_Grid
 		}
 	}
 	
-	public boolean computePath() 
+	public boolean computePath(char ver, int a, int b) 
 	{		
-		while(!closed.contains(L_Grid[x_size-1][y_size-1])) 
+		this.numberOfExpandedCells = 0;
+		while(!closed.contains(L_Grid[a][b])) 
 		{			
 			if(open.peek() == null) return false;
 			L_Cell state = open.poll();
@@ -120,7 +171,7 @@ public class L_Grid
 				if(!closed.contains(L_Grid[state.xCoor - 1][state.yCoor]) && !L_Grid[state.xCoor - 1][state.yCoor].actionRemoved)
 				{
 					L_Grid[state.xCoor-1][state.yCoor].gVal = Double.POSITIVE_INFINITY;
-					action(state.xCoor - 1, state.yCoor, state);
+					action(ver, state.xCoor - 1, state.yCoor, state);
 				}
 			}
 			//right
@@ -129,7 +180,7 @@ public class L_Grid
 				if(!closed.contains(L_Grid[state.xCoor][state.yCoor + 1]) && !L_Grid[state.xCoor][state.yCoor + 1].actionRemoved)
 				{
 					L_Grid[state.xCoor][state.yCoor + 1].gVal = Double.POSITIVE_INFINITY;
-					action(state.xCoor, state.yCoor + 1, state);
+					action(ver, state.xCoor, state.yCoor + 1, state);
 				}
 			}
 			//down
@@ -138,7 +189,7 @@ public class L_Grid
 				if(!closed.contains(L_Grid[state.xCoor + 1][state.yCoor]) && !L_Grid[state.xCoor + 1][state.yCoor].actionRemoved)
 				{
 					L_Grid[state.xCoor + 1][state.yCoor].gVal = Double.POSITIVE_INFINITY;
-					action(state.xCoor + 1, state.yCoor, state);
+					action(ver, state.xCoor + 1, state.yCoor, state);
 				}
 			}
 			//left
@@ -147,7 +198,7 @@ public class L_Grid
 				if(!closed.contains(L_Grid[state.xCoor][state.yCoor - 1]) && !L_Grid[state.xCoor][state.yCoor - 1].actionRemoved)
 				{
 					L_Grid[state.xCoor][state.yCoor - 1].gVal = Double.POSITIVE_INFINITY;
-					action(state.xCoor, state.yCoor - 1, state);
+					action(ver, state.xCoor, state.yCoor - 1, state);
 				}
 			}
 			}
@@ -158,7 +209,7 @@ public class L_Grid
 		return true;
 	}
 	
-	public void aStar()
+	public void aStar(char ver)
 	{
 		L_Cell curr = L_Grid[0][0];
 		//preliminary check
@@ -168,25 +219,54 @@ public class L_Grid
 			L_Grid[1][0].actionRemoved = true;
 		while(curr.xCoor != x_size -1 || curr.yCoor != y_size -1)
 		{
-			L_Grid[curr.xCoor][curr.yCoor].gVal = 0;
-			L_Grid[x_size-1][y_size-1].gVal = Double.POSITIVE_INFINITY;
 			open.clear();
 			closed.clear();
-			open.add(L_Grid[curr.xCoor][curr.yCoor]);
-			
-			boolean success = computePath();
+			boolean success = false;
+			switch(ver)
+			{
+				case 'b':
+					L_Grid[100][100].gVal = 0;
+					L_Grid[curr.xCoor][curr.yCoor].gVal = Double.POSITIVE_INFINITY;
+					open.add(L_Grid[100][100]);
+					success = computePath(ver, curr.xCoor, curr.yCoor);
+					break;
+				case 'a':
+				case 'f':
+				default:
+					L_Grid[curr.xCoor][curr.yCoor].gVal = 0;
+					L_Grid[100][100].gVal = Double.POSITIVE_INFINITY;
+					open.add(L_Grid[curr.xCoor][curr.yCoor]);
+					success = computePath(ver, 100, 100);
+					break;
+			}
 			if(!success)
 			{
 				//agent.addToVisualization(null, null, null);
 				System.out.println("cannot reach target");
 				return;
 			}
-			
-			L_Cell tracebackPtr = L_Grid[x_size-1][y_size-1];
-			while(tracebackPtr != curr) {
-				L_Cell predecessor = tracebackPtr.prev;
-				predecessor.next = tracebackPtr;
-				tracebackPtr = predecessor;
+			switch(ver)
+			{
+				case 'b':
+					L_Cell advance = L_Grid[curr.xCoor][curr.yCoor];
+					while(!(advance.xCoor == 100 && advance.yCoor == 100))
+					{
+						L_Cell further = advance.next;
+						further.prev = advance;
+						advance = further;
+					}
+					break;
+				case 'a':
+				case 'f':
+				default:
+					L_Cell backtrack = L_Grid[100][100];
+					while(backtrack != curr)
+					{
+						L_Cell prior = backtrack.prev;
+						prior.next = backtrack;
+						backtrack = prior;
+					}
+					break;
 			}
 			
 			L_Cell ptr = curr;
@@ -197,6 +277,8 @@ public class L_Grid
 			{
 				if(ptr.next == null) 
 					{ptr.toString();}
+				if(ver == 'a')
+					ptr.hVal = L_Grid[100][100].gVal - ptr.gVal;
 				//update action costs
 				if(ptr.xCoor > 0 && L_Grid[ptr.xCoor - 1][ptr.yCoor].isBlocked)
 					{
@@ -232,7 +314,7 @@ public class L_Grid
 			if(curr == L_Grid[x_size-1][y_size-1]){
 				agentEnd = L_Grid[x_size-1][y_size-1];
 			}
-			agent.addToVisualization(agentStart, agentEnd, newBlockedCells, 0);
+			agent.addToVisualization(agentStart, agentEnd, newBlockedCells, this.numberOfExpandedCells);
 			this.newBlockedCells.clear();
 			if(ptr.isBlocked)
 				curr = ptr.prev;
