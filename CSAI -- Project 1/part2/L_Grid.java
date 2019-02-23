@@ -166,7 +166,7 @@ public class L_Grid
 			L_Grid[0][1].actionRemoved = true;
 		if(L_Grid[1][0].isBlocked)
 			L_Grid[1][0].actionRemoved = true;
-		while(curr.xCoor != x_size -1 && curr.yCoor != y_size -1)
+		while(curr.xCoor != x_size -1 || curr.yCoor != y_size -1)
 		{
 			L_Grid[curr.xCoor][curr.yCoor].gVal = 0;
 			L_Grid[x_size-1][y_size-1].gVal = Double.POSITIVE_INFINITY;
@@ -232,7 +232,7 @@ public class L_Grid
 			if(curr == L_Grid[x_size-1][y_size-1]){
 				agentEnd = L_Grid[x_size-1][y_size-1];
 			}
-			agent.addToVisualization(agentStart, agentEnd, newBlockedCells);
+			agent.addToVisualization(agentStart, agentEnd, newBlockedCells, 0);
 			this.newBlockedCells.clear();
 			if(ptr.isBlocked)
 				curr = ptr.prev;

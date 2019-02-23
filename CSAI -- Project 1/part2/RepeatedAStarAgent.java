@@ -12,10 +12,13 @@ public class RepeatedAStarAgent {
 	Game game;
 	List<L_Cell> prevPath;
 	int counter;
-	StringBuilder history;
+	StringBuilder historyFrame;
+	List<String> history;
 	int numberOfExpandedCells;
+	boolean incompletable = false;
 	public RepeatedAStarAgent(Game game) {
-		this.history = new StringBuilder();
+		this.historyFrame = new StringBuilder();
+		this.history = new ArrayList<String>();
 		this.game = game;
 		prevPath = new ArrayList<L_Cell>();
 	}
@@ -28,15 +31,18 @@ public class RepeatedAStarAgent {
 		
 	}
 	
-	public String Run() {
+	public List<String> Run() {
 		L_Grid agent = new L_Grid(this.game.trueMaze, this);
 		agent.aStar();
 		int numberOfExpandedCells = agent.numberOfExpandedCells;
-		return history.toString()+"\n Number of nodes expanded: "+this.numberOfExpandedCells +"\n";
+		history.add("\n Number of nodes expanded: "+this.numberOfExpandedCells +"\n");
+		return history;
 	}
 	
-	public void addToVisualization(L_Cell agentStart, L_Cell agentEnd, List<int[]> newBlockedCells) {
+	public void addToVisualization(L_Cell agentStart, L_Cell agentEnd, List<int[]> newBlockedCells, int numberExpanded) {
+		this.numberOfExpandedCells += numberExpanded;
 		if(newBlockedCells == null) {
+			this.incompletable = true;
 			return;
 		}
 		System.out.println("E");
@@ -83,7 +89,7 @@ public class RepeatedAStarAgent {
 		
 		
 		// 4. Render the aware maze and add it to the visualization history. 
-		history.append("\n Iteration #" + counter + "\n" + game.awareMaze.getRender()+"\n");
+		history.add("\n Iteration #" + counter + "\n\n" + game.awareMaze.getRender()+"\n");
 		//history.append(counter);
 	}
 }
