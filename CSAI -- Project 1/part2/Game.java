@@ -9,7 +9,7 @@ public class Game {
 	
 	public Game(Maze maze) {
 		this.trueMaze = maze;
-		this.awareMaze = maze.cloneMaze();
+		this.awareMaze = Maze.createNewMaze(trueMaze.size[0], trueMaze.size[1]);
 		this.visualization = new GameVisualization(awareMaze);
 	}
 }

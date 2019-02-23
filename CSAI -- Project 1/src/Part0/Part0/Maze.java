@@ -91,6 +91,15 @@ public class Maze implements Serializable{
 	}
 	
 	public Maze cloneMaze() {
-		return null; //Remember to write this function
+		Maze cloneMaze = new Maze(size[0],size[1]);
+		int x = size[0];
+		int y = size[1];
+		for(int i = 0; i < x; i++) {
+			for(int j = 0; j < y; j++) {
+				cloneMaze.getCellAtCoordinates(i,j).status = cells[i][j].status;
+			}
+		}
+		
+		return cloneMaze;
 	}
 }

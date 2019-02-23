@@ -14,7 +14,7 @@ public class UnvisitedNodesTracker {
 	public int[] getUnvisitedNode() {
 		for(int i = 0; i < sizeX; i++) {
 			for(int j = 0; j < sizeX; j++) {
-				if(MazeModel[i][j]) {
+				if(MazeModel[i][j] !=true) {
 					return new int[]{i,j};
 				}
 			}

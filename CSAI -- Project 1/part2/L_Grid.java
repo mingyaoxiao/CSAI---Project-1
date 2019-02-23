@@ -166,7 +166,7 @@ public class L_Grid
 			L_Grid[0][1].actionRemoved = true;
 		if(L_Grid[1][0].isBlocked)
 			L_Grid[1][0].actionRemoved = true;
-		while(curr.xCoor != x_size && curr.yCoor != x_size)
+		while(curr.xCoor != x_size -1 && curr.yCoor != y_size -1)
 		{
 			L_Grid[curr.xCoor][curr.yCoor].gVal = 0;
 			L_Grid[x_size-1][y_size-1].gVal = Double.POSITIVE_INFINITY;
@@ -181,12 +181,20 @@ public class L_Grid
 				System.out.println("cannot reach target");
 				return;
 			}
+			
+			L_Cell tracebackPtr = L_Grid[x_size-1][y_size-1];
+			while(tracebackPtr != curr) {
+				L_Cell predecessor = tracebackPtr.prev;
+				predecessor.next = tracebackPtr;
+				tracebackPtr = predecessor;
+			}
+			
 			L_Cell ptr = curr;
 			L_Cell prev = curr;
 			L_Cell agentStart = curr;
-			while(ptr != null && ptr.xCoor != x_size && ptr.yCoor != x_size && !ptr.isBlocked)
+			System.out.print(",("+ptr.xCoor + "," + ptr.yCoor+")");
+			while(ptr != null && (ptr.xCoor != x_size -1 || ptr.yCoor != x_size-1) && !ptr.isBlocked)
 			{
-				System.out.print(",("+ptr.xCoor + "," + ptr.yCoor+")");
 				if(ptr.next == null) 
 					{ptr.toString();}
 				//update action costs
@@ -195,12 +203,12 @@ public class L_Grid
 						L_Grid[ptr.xCoor - 1][ptr.yCoor].actionRemoved = true;
 						this.newBlockedCells.add(new int[] {ptr.xCoor - 1, ptr.yCoor} );
 					}
-				if(ptr.yCoor < x_size && L_Grid[ptr.xCoor][ptr.yCoor + 1].isBlocked)
+				if(ptr.yCoor < y_size -1 && L_Grid[ptr.xCoor][ptr.yCoor + 1].isBlocked)
 					{
 						L_Grid[ptr.xCoor][ptr.yCoor + 1].actionRemoved = true;
 						this.newBlockedCells.add(new int[] {ptr.xCoor, ptr.yCoor + 1} );
 					}
-				if(ptr.xCoor < x_size && L_Grid[ptr.xCoor + 1][ptr.yCoor].isBlocked)
+				if(ptr.xCoor < x_size -1 && L_Grid[ptr.xCoor + 1][ptr.yCoor].isBlocked)
 					{
 						L_Grid[ptr.xCoor + 1][ptr.yCoor].actionRemoved = true;
 						this.newBlockedCells.add(new int[] {ptr.xCoor + 1, ptr.yCoor} );
@@ -211,11 +219,19 @@ public class L_Grid
 						this.newBlockedCells.add(new int[] {ptr.xCoor, ptr.yCoor - 1} );
 					}
 				ptr = ptr.next;
+				if(ptr == L_Grid[x_size-1][y_size-1]) {
+					this.toString();
+					curr = L_Grid[x_size-1][y_size-1];
+				}
+				System.out.print(",("+ptr.xCoor + "," + ptr.yCoor+")");
 			}
 			System.out.println("\n");
 			L_Cell agentEnd = null;
 			if(ptr.isBlocked)
 				agentEnd = ptr.prev;
+			if(curr == L_Grid[x_size-1][y_size-1]){
+				agentEnd = L_Grid[x_size-1][y_size-1];
+			}
 			agent.addToVisualization(agentStart, agentEnd, newBlockedCells);
 			this.newBlockedCells.clear();
 			if(ptr.isBlocked)
