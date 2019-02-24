@@ -225,18 +225,18 @@ public class L_Grid
 			switch(ver)
 			{
 				case 'b':
-					L_Grid[100][100].gVal = 0;
+					L_Grid[x_size - 1][x_size -1].gVal = 0;
 					L_Grid[curr.xCoor][curr.yCoor].gVal = Double.POSITIVE_INFINITY;
-					open.add(L_Grid[100][100]);
+					open.add(L_Grid[x_size - 1][x_size -1]);
 					success = computePath(ver, curr.xCoor, curr.yCoor);
 					break;
 				case 'a':
 				case 'f':
 				default:
 					L_Grid[curr.xCoor][curr.yCoor].gVal = 0;
-					L_Grid[100][100].gVal = Double.POSITIVE_INFINITY;
+					L_Grid[x_size-1][x_size-1].gVal = Double.POSITIVE_INFINITY;
 					open.add(L_Grid[curr.xCoor][curr.yCoor]);
-					success = computePath(ver, 100, 100);
+					success = computePath(ver, x_size-1, x_size-1);
 					break;
 			}
 			if(!success)
@@ -249,7 +249,7 @@ public class L_Grid
 			{
 				case 'b':
 					L_Cell advance = L_Grid[curr.xCoor][curr.yCoor];
-					while(!(advance.xCoor == 100 && advance.yCoor == 100))
+					while(!(advance.xCoor == x_size-1 && advance.yCoor == x_size-1))
 					{
 						L_Cell further = advance.next;
 						further.prev = advance;
@@ -259,7 +259,7 @@ public class L_Grid
 				case 'a':
 				case 'f':
 				default:
-					L_Cell backtrack = L_Grid[100][100];
+					L_Cell backtrack = L_Grid[x_size - 1][x_size -1];
 					while(backtrack != curr)
 					{
 						L_Cell prior = backtrack.prev;

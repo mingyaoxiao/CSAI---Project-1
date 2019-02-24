@@ -17,6 +17,8 @@ public class RepeatedAStarAgent {
 	int numberOfExpandedCells;
 	boolean incompletable = false;
 	int[] agentPos;
+	int pathLength = 0;
+	int iterations = 0;
 	
 	public RepeatedAStarAgent(Game game) {
 		this.historyFrame = new StringBuilder();
@@ -36,6 +38,7 @@ public class RepeatedAStarAgent {
 	public List<String> Run(char version, char tiebreaker) {
 			L_Grid agent = new L_Grid(version, tiebreaker, this.game.trueMaze, this);
 			this.agentPos = new int[]{this.game.trueMaze.agentPos[0],this.game.trueMaze.agentPos[1]};
+			history.add("\n Initial Configuration: " +"\n" + this.game.trueMaze.getRender());
 			agent.aStar(version);
 			int numberOfExpandedCells = agent.numberOfExpandedCells;
 			history.add("\n Number of nodes expanded: "+this.numberOfExpandedCells +"\n");
@@ -54,6 +57,7 @@ public class RepeatedAStarAgent {
 	}
 	
 	public void addToVisualization(L_Cell agentStart, L_Cell agentEnd, List<int[]> newBlockedCells, int numberExpanded) {
+		iterations++;
 		this.numberOfExpandedCells += numberExpanded;
 		if(newBlockedCells == null) {
 			this.incompletable = true;
@@ -70,8 +74,8 @@ public class RepeatedAStarAgent {
 		Execute(path);*/
 		
 		// 0. Move the agent 
-		this.game.awareMaze.getCellAtCoordinates(this.agentPos).status = Unblocked;
-		this.game.awareMaze.getCellAtCoordinates(agentStart.xCoor, agentStart.yCoor).status = Agent;
+		this.game.awareMaze.getCellAtCoordinates(agentStart.xCoor, agentStart.yCoor).status = Unblocked;
+		this.game.awareMaze.getCellAtCoordinates(agentEnd.xCoor, agentEnd.yCoor).status = Agent;
 		
 		// 1. Reset cellstatus from agentvisited to unblocked.
 		Iterator<L_Cell> it = prevPath.iterator();
@@ -83,17 +87,22 @@ public class RepeatedAStarAgent {
 		// 2. Set the appropriate cells from unblocked to agentvisited.
 		prevPath.clear();
 		L_Cell ptr = agentStart;
+		int counter = 0; 
 		while(!prevPath.contains(agentEnd)) {
 			L_Cell cur = ptr;
 			Cell visitedCell = null;
 			try {
 				visitedCell = game.awareMaze.getCellAtCoordinates(cur.xCoor, cur.yCoor);
 			}
+			
 			catch(Exception e) {
 				e.printStackTrace();
 			}
+			
 			visitedCell.status = OnPath;
+			game.trueMaze.getCellAtCoordinates(cur.xCoor, cur.yCoor).status = OnPath;
 			prevPath.add(cur);
+			counter++;
 			ptr = ptr.next;
 		}
 		
@@ -103,8 +112,7 @@ public class RepeatedAStarAgent {
 			for(int index = 0; index < newBlockedCells.size(); index++) {
 				blockedCellPtr = game.awareMaze.getCellAtCoordinates(newBlockedCells.get(index));
 				Cell visitedCell = game.awareMaze.getCellAtCoordinates(blockedCellPtr.coordinates[0], blockedCellPtr.coordinates[1]);
-				visitedCell.status = Blocked;
-				
+				visitedCell.status = Blocked;	
 			}
 		}
 		catch (Exception e) {
@@ -113,7 +121,9 @@ public class RepeatedAStarAgent {
 		
 		
 		// 4. Render the aware maze and add it to the visualization history. 
-		history.add("\n Iteration #" + counter + "\n\n" + game.awareMaze.getRender()+"\n");
+		history.add("\n Iteration #" + iterations + "\n\n" + game.awareMaze.getRender()+"\n");
 		//history.append(counter);
+		
+		this.pathLength += counter;
 	}
 }

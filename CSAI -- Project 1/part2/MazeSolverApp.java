@@ -28,10 +28,10 @@ public class MazeSolverApp {
 		RepeatedAStarAgent agent = new RepeatedAStarAgent(g);
 		// run it on the maze
 		char version = 'f';
-		char tiebreaker = 'f';
+		char tiebreaker = 'l';
 		List<String> history = agent.Run(version, tiebreaker);
 		
-		// display the visualizatin
+		// display the visualization
 		//if(agent.incompletable == false) {
 			File f = new File("history.txt");
 			try {
