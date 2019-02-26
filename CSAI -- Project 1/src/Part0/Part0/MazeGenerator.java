@@ -7,7 +7,7 @@ public class MazeGenerator {
 		for(int i = 0; i < n; i++) {
 			Maze maze = Maze.createNewMaze(sizeX, sizeY);
 			
-			DFS builder = new DFS(maze);
+			RandomMazeGenerator builder = new RandomMazeGenerator(maze);
 			maze=builder.dfs(maze);
 			maze.saveMaze(folderLocation+"maze"+i+Maze.mazeExtension);
 			System.out.println("Created the file '" + i + Maze.mazeExtension +  "' in the directory '"+folderLocation+"' with size of " + sizeX + " by " + sizeY);

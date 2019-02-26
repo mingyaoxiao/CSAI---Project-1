@@ -19,6 +19,7 @@ public class L_Grid
 	int x_size;
 	int y_size;
 	Maze m;
+	int counter = -1;
 	//src/maze0.maze.maze
 	L_Grid(char ver, char tie, Maze m, RepeatedAStarAgent agent){
 		this.m = m;
@@ -50,7 +51,7 @@ public class L_Grid
 					case 'a':
 					case 'f':
 					default:
-						L_Grid[i][j].hVal = (100 - i) + (100 - j);
+						L_Grid[i][j].hVal = (x_size - 1 - i) + (y_size - 1 - j);
 						break;
 				}
 				L_Grid[i][j].actionRemoved = false;
@@ -128,7 +129,7 @@ public class L_Grid
 		}
 	}
 
-	public void action(char ver, int nextX, int nextY, L_Cell prevL_Cell)
+	public void action(char ver, int nextX, int nextY, L_Cell prevL_Cell, int a, int b)
 	{
 		if(L_Grid[nextX][nextY].gVal > prevL_Cell.gVal + 1)
 		{					
@@ -147,7 +148,9 @@ public class L_Grid
 			if(open.contains(L_Grid[nextX][nextY])) 
 			{						
 				open.remove(L_Grid[nextX][nextY]);
-			}					
+			}	
+			
+			//if(ver == 'b')			L_Grid[nextX][nextY].hVal = (a - nextX) + (b - nextY);
 			open.add(L_Grid[nextX][nextY]);
 		}
 	}
@@ -170,8 +173,12 @@ public class L_Grid
 			{
 				if(!closed.contains(L_Grid[state.xCoor - 1][state.yCoor]) && !L_Grid[state.xCoor - 1][state.yCoor].actionRemoved)
 				{
-					L_Grid[state.xCoor-1][state.yCoor].gVal = Double.POSITIVE_INFINITY;
-					action(ver, state.xCoor - 1, state.yCoor, state);
+					L_Cell c = L_Grid[state.xCoor-1][state.yCoor];
+					if(c.search < counter) {
+						c.gVal = Double.POSITIVE_INFINITY;
+						c.search = counter;
+					}
+					action(ver, state.xCoor - 1, state.yCoor, state, a, b);
 				}
 			}
 			//right
@@ -179,8 +186,12 @@ public class L_Grid
 			{
 				if(!closed.contains(L_Grid[state.xCoor][state.yCoor + 1]) && !L_Grid[state.xCoor][state.yCoor + 1].actionRemoved)
 				{
-					L_Grid[state.xCoor][state.yCoor + 1].gVal = Double.POSITIVE_INFINITY;
-					action(ver, state.xCoor, state.yCoor + 1, state);
+					L_Cell c = L_Grid[state.xCoor][state.yCoor + 1];
+					if(c.search < counter) {
+						c.gVal = Double.POSITIVE_INFINITY;
+						c.search = counter;
+					}
+					action(ver, state.xCoor, state.yCoor + 1, state, a, b);
 				}
 			}
 			//down
@@ -188,8 +199,12 @@ public class L_Grid
 			{
 				if(!closed.contains(L_Grid[state.xCoor + 1][state.yCoor]) && !L_Grid[state.xCoor + 1][state.yCoor].actionRemoved)
 				{
-					L_Grid[state.xCoor + 1][state.yCoor].gVal = Double.POSITIVE_INFINITY;
-					action(ver, state.xCoor + 1, state.yCoor, state);
+					L_Cell c = L_Grid[state.xCoor+1][state.yCoor];
+					if(c.search < counter) {
+						c.gVal = Double.POSITIVE_INFINITY;
+						c.search = counter;
+					}
+					action(ver, state.xCoor + 1, state.yCoor, state, a, b);
 				}
 			}
 			//left
@@ -197,8 +212,12 @@ public class L_Grid
 			{
 				if(!closed.contains(L_Grid[state.xCoor][state.yCoor - 1]) && !L_Grid[state.xCoor][state.yCoor - 1].actionRemoved)
 				{
-					L_Grid[state.xCoor][state.yCoor - 1].gVal = Double.POSITIVE_INFINITY;
-					action(ver, state.xCoor, state.yCoor - 1, state);
+					L_Cell c = L_Grid[state.xCoor][state.yCoor - 1];
+					if(c.search < counter) {
+						c.gVal = Double.POSITIVE_INFINITY;
+						c.search = counter;
+					}
+					action(ver, state.xCoor, state.yCoor - 1, state, a, b);
 				}
 			}
 			}
@@ -219,6 +238,7 @@ public class L_Grid
 			L_Grid[1][0].actionRemoved = true;
 		while(curr.xCoor != x_size -1 || curr.yCoor != y_size -1)
 		{
+			counter++;
 			open.clear();
 			closed.clear();
 			boolean success = false;
@@ -243,8 +263,11 @@ public class L_Grid
 			{
 				//agent.addToVisualization(null, null, null);
 				System.out.println("cannot reach target");
+				this.agent.incompletable = true;
 				return;
 			}
+			if(ver == 'a')
+				closed.forEach((n) -> n.hVal = L_Grid[x_size - 1][x_size - 1].gVal - n.gVal);
 			switch(ver)
 			{
 				case 'b':
@@ -277,8 +300,6 @@ public class L_Grid
 			{
 				if(ptr.next == null) 
 					{ptr.toString();}
-				if(ver == 'a')
-					ptr.hVal = L_Grid[100][100].gVal - ptr.gVal;
 				//update action costs
 				if(ptr.xCoor > 0 && L_Grid[ptr.xCoor - 1][ptr.yCoor].isBlocked)
 					{
@@ -319,6 +340,16 @@ public class L_Grid
 			if(ptr.isBlocked)
 				curr = ptr.prev;
 			System.out.println("D");
+			if(ver == 'b')
+			{
+				for(int i = 0; i < x_size; ++i) 
+				{			
+					for(int j = 0; j < y_size; ++j) 
+					{
+						L_Grid[i][j].hVal = Math.abs(curr.xCoor - i) + Math.abs(curr.yCoor - j);
+					}
+				}
+			}
 		}
 		System.out.println("reached the target");
 	}

@@ -7,14 +7,14 @@ import static Part0.CellStatus.*;
  * @author Will
  *
  */
-public class DFS {
+public class RandomMazeGenerator {
 
 	/**
 	 * @param args
 	 */
 	Maze maze;
 	
-	public DFS (Maze maze){
+	public RandomMazeGenerator (Maze maze){
 		this.maze = maze;
 	}
 	

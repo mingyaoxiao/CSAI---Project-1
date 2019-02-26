@@ -19,6 +19,7 @@ public class RepeatedAStarAgent {
 	int[] agentPos;
 	int pathLength = 0;
 	int iterations = 0;
+	boolean completed = true;
 	
 	public RepeatedAStarAgent(Game game) {
 		this.historyFrame = new StringBuilder();
@@ -35,14 +36,13 @@ public class RepeatedAStarAgent {
 		
 	}
 	
-	public List<String> Run(char version, char tiebreaker) {
+	public void Run(char version, char tiebreaker) {
 			L_Grid agent = new L_Grid(version, tiebreaker, this.game.trueMaze, this);
 			this.agentPos = new int[]{this.game.trueMaze.agentPos[0],this.game.trueMaze.agentPos[1]};
 			history.add("\n Initial Configuration: " +"\n" + this.game.trueMaze.getRender());
 			agent.aStar(version);
 			int numberOfExpandedCells = agent.numberOfExpandedCells;
 			history.add("\n Number of nodes expanded: "+this.numberOfExpandedCells +"\n");
-			return history;
 		/*else if (mode == AlgoMode.Adaptive){
 			return null;
 		}

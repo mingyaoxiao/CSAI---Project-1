@@ -14,6 +14,7 @@ import static part2.AlgoMode.*;
 
 public class MazeSolverApp {
 	public static void main(String[] args) {
+	//src/stat/maze0.maze.maze{
 		// Ask to visualize A* on a maze
 		Scanner scanner = new Scanner(System.in);
 		//Get filepath of maze
@@ -27,20 +28,21 @@ public class MazeSolverApp {
 		Game g = new Game(maze);
 		RepeatedAStarAgent agent = new RepeatedAStarAgent(g);
 		// run it on the maze
-		char version = 'f';
-		char tiebreaker = 'l';
-		List<String> history = agent.Run(version, tiebreaker);
+		char version = 'b';
+		char tiebreaker = 's';
+		agent.Run(version, tiebreaker);
+		List<String> history = agent.history; 
 		
 		// display the visualization
 		//if(agent.incompletable == false) {
 			File f = new File("history.txt");
 			try {
 				f.createNewFile();
-				try(FileWriter fw = new FileWriter("myfile.txt", true);
+				try(FileWriter fw = new FileWriter("bS.txt", true);
 					    BufferedWriter bw = new BufferedWriter(fw);
 					    PrintWriter out = new PrintWriter(bw))
 					{
-						for(int i = 0; i< history.size(); i++) {
+						for(int i = 0; i < history.size(); i++) {
 							//System.out.println(history.get(i));
 						    out.println(history.get(i));
 						}

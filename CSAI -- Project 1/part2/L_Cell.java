@@ -11,6 +11,7 @@ public class L_Cell
 	public boolean actionRemoved;
 	public L_Cell prev;
 	public L_Cell next;
+	public int search;
 	
 	L_Cell()
 	{
