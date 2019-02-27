@@ -42,6 +42,7 @@ public class RepeatedAStarAgent {
 			history.add("\n Initial Configuration: " +"\n" + this.game.trueMaze.getRender());
 			agent.aStar(version);
 			int numberOfExpandedCells = agent.numberOfExpandedCells;
+			
 			history.add("\n Number of nodes expanded: "+this.numberOfExpandedCells +"\n");
 		/*else if (mode == AlgoMode.Adaptive){
 			return null;
@@ -74,8 +75,7 @@ public class RepeatedAStarAgent {
 		Execute(path);*/
 		
 		// 0. Move the agent 
-		this.game.awareMaze.getCellAtCoordinates(agentStart.xCoor, agentStart.yCoor).status = Unblocked;
-		this.game.awareMaze.getCellAtCoordinates(agentEnd.xCoor, agentEnd.yCoor).status = Agent;
+		
 		
 		// 1. Reset cellstatus from agentvisited to unblocked.
 		Iterator<L_Cell> it = prevPath.iterator();
@@ -119,7 +119,8 @@ public class RepeatedAStarAgent {
 			this.toString();
 		}
 		
-		
+		this.game.awareMaze.getCellAtCoordinates(agentStart.xCoor, agentStart.yCoor).status = Unblocked;
+		this.game.awareMaze.getCellAtCoordinates(agentEnd.xCoor, agentEnd.yCoor).status = Agent;
 		// 4. Render the aware maze and add it to the visualization history. 
 		history.add("\n Iteration #" + iterations + "\n\n" + game.awareMaze.getRender()+"\n");
 		//history.append(counter);

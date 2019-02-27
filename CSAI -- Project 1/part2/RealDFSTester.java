@@ -1,5 +1,8 @@
 package part2;
 
+import static Part0.CellStatus.Blocked;
+import static Part0.CellStatus.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -7,11 +10,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import Part0.Maze;
-import static Part0.CellStatus.*;
 
-public class TextMazeTester {
+public class RealDFSTester {
 	public static void main(String[] args) throws IOException {
-		String filePath = "src/grid0.txt";
+		String filePath = "realGrid1.txt";
 		File f = new File(filePath);
 		FileReader fr = new FileReader(filePath);
 		Maze maze = Maze.createNewMaze(101, 101);
@@ -28,10 +30,16 @@ public class TextMazeTester {
 			fr.read();
 		}
 		
-		RepeatedAStarAgent agent = new RepeatedAStarAgent(new Game(maze));
-		agent.Run('a', 'l');
+		maze.getCellAtCoordinates(1, 1).status = Agent;
+		maze.getCellAtCoordinates(99, 99).status = Goal;
 		
-		FileWriter fw = new FileWriter("grid1Visualization.txt");
+		System.out.println(maze.getRender());
+		
+		RepeatedAStarAgent agent = new RepeatedAStarAgent(new Game(maze));
+		agent.Run('f', 'l');
+		
+		
+		FileWriter fw = new FileWriter("realGrid0Visualization.txt");
 		
 		agent.history.forEach((s) -> {
 			try {
@@ -40,12 +48,6 @@ public class TextMazeTester {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		});
-		//fw.write("\nNumber of nodes expanded: " + agent.numberOfExpandedCells);
-		System.out.println("Number of nodes expanded: " + agent.numberOfExpandedCells);
-		/*for(int i = 0; i < agent.history.size(); i++) {
-			
-		}*/
-		//fw.write(agent.history);
+	});
 	}
 }

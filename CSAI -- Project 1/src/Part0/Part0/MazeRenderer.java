@@ -16,11 +16,11 @@ public class MazeRenderer {
 			for(int j = 0; j < sizeY; j++) {
 				int[] currentPos = new int[] {i,j};
 				Cell currentCell = maze.getCellAtCoordinates(currentPos);
-				if(cdEqual(currentPos,maze.agentPos)) {
+				if(currentCell.status==Agent) {
 					renderString.append("A");
 					continue;
 				}
-				else if(cdEqual(currentPos,maze.goalPos)) {
+				else if(currentCell.status == Goal) {
 					renderString.append("G");
 					continue;
 				}
@@ -28,7 +28,7 @@ public class MazeRenderer {
 					renderString.append("S");
 				}
 				else if(currentCell.status == OnPath) {
-					renderString.append("O");
+					renderString.append("+");
 				}
 				else if (currentCell.status == Blocked) renderString.append("\u25A0");
 				else if (currentCell.status == Unblocked) renderString.append("\u25A1");
