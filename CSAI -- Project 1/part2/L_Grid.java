@@ -11,13 +11,17 @@ import Part0.Maze;
 public class L_Grid 
 {	
 	public L_Cell[][] L_Grid;
-	public PriorityQueue<L_Cell> open;
-	public PriorityQueue<L_Cell> closed;
+	public BinaryHeap<L_Cell> open;
+	public ArrayList<L_Cell> closed;
 	public RepeatedAStarAgent agent;
 	public int numberOfExpandedCells;
 	public List<int[]> newBlockedCells;
 	int x_size;
 	int y_size;
+	int startPosX;
+	int startPosY;
+	int goalPosX;
+	int goalPosY;
 	Maze m;
 	int counter = -1;
 	//src/maze0.maze.maze
@@ -27,6 +31,10 @@ public class L_Grid
 		x_size = m.size[0];
 		y_size = m.size[1];
 		L_Grid = new L_Cell[x_size][y_size];
+		startPosX = 1;
+		startPosY = 1;
+		goalPosX = 99;
+		goalPosY = 99;
 		for(int i = 0; i < x_size; ++i) 
 		{			
 			for(int j = 0; j < y_size; ++j) 
@@ -51,22 +59,23 @@ public class L_Grid
 					case 'a':
 					case 'f':
 					default:
-						L_Grid[i][j].hVal = (x_size - 1 - i) + (y_size - 1 - j);
+						L_Grid[i][j].hVal = (goalPosX - i) + (goalPosY - j);
 						break;
 				}
 				L_Grid[i][j].actionRemoved = false;
 			}
+			
 		}
 		switch(tie)
 		{
 			case 's':
-				open = new PriorityQueue<L_Cell>(10, L_Cell.smaller);
-				closed = new PriorityQueue<L_Cell>(10, L_Cell.smaller);
+				open = new BinaryHeap<L_Cell>(L_Cell.smaller);
+				closed = new ArrayList<L_Cell>();
 				break;
 			case 'l':
 			default:
-				open = new PriorityQueue<L_Cell>(10, L_Cell.larger);
-				closed = new PriorityQueue<L_Cell>(10, L_Cell.larger);
+				open = new BinaryHeap<L_Cell>(L_Cell.larger);
+				closed = new ArrayList<L_Cell>();
 				break;
 		}
 		newBlockedCells = new ArrayList<int[]>();
@@ -119,9 +128,9 @@ public class L_Grid
 	
 	public void printL_Grid() 
 	{		
-		for(int i = 0; i < 101; ++i) 
+		for(int i = 0; i <= x_size; ++i) 
 		{			
-			for(int j = 0; j < 101; ++j) 
+			for(int j = 0; j <= y_size; ++j) 
 			{				
 				System.out.print((L_Grid[i][j].isBlocked) ? "1" : "0");
 			}
@@ -147,11 +156,10 @@ public class L_Grid
 			}
 			if(open.contains(L_Grid[nextX][nextY])) 
 			{						
-				open.remove(L_Grid[nextX][nextY]);
+				open.delete(L_Grid[nextX][nextY]);
 			}	
 			
-			//if(ver == 'b')			L_Grid[nextX][nextY].hVal = (a - nextX) + (b - nextY);
-			open.add(L_Grid[nextX][nextY]);
+			open.insert(L_Grid[nextX][nextY]);
 		}
 	}
 	
@@ -162,14 +170,14 @@ public class L_Grid
 		{			
 			if(open.peek() == null) return false;
 			L_Cell state = open.poll();
-			if(state.xCoor == 2 && state.yCoor == 0 && state.gVal ==0) {
+			if(state.xCoor == this.startPosX && state.yCoor == startPosY && state.gVal ==0) {
 				this.toString();
 			}
 			closed.add(state);
 			this.numberOfExpandedCells++;
 			//up
 			try {
-			if(state.xCoor > 0)
+			if(state.xCoor > this.startPosX)
 			{
 				if(!closed.contains(L_Grid[state.xCoor - 1][state.yCoor]) && !L_Grid[state.xCoor - 1][state.yCoor].actionRemoved)
 				{
@@ -182,7 +190,7 @@ public class L_Grid
 				}
 			}
 			//right
-			if(state.yCoor + 1 < x_size)
+			if(state.yCoor + 2 < x_size)
 			{
 				if(!closed.contains(L_Grid[state.xCoor][state.yCoor + 1]) && !L_Grid[state.xCoor][state.yCoor + 1].actionRemoved)
 				{
@@ -195,7 +203,7 @@ public class L_Grid
 				}
 			}
 			//down
-			if(state.xCoor + 1 < y_size)
+			if(state.xCoor + 2 < y_size)
 			{
 				if(!closed.contains(L_Grid[state.xCoor + 1][state.yCoor]) && !L_Grid[state.xCoor + 1][state.yCoor].actionRemoved)
 				{
@@ -208,7 +216,7 @@ public class L_Grid
 				}
 			}
 			//left
-			if(state.yCoor > 0)
+			if(state.yCoor > this.startPosY)
 			{
 				if(!closed.contains(L_Grid[state.xCoor][state.yCoor - 1]) && !L_Grid[state.xCoor][state.yCoor - 1].actionRemoved)
 				{
@@ -230,13 +238,21 @@ public class L_Grid
 	
 	public void aStar(char ver)
 	{
-		L_Cell curr = L_Grid[0][0];
+		L_Cell curr = L_Grid[startPosX][startPosY];
 		//preliminary check
-		if(L_Grid[0][1].isBlocked)
-			L_Grid[0][1].actionRemoved = true;
-		if(L_Grid[1][0].isBlocked)
-			L_Grid[1][0].actionRemoved = true;
-		while(curr.xCoor != x_size -1 || curr.yCoor != y_size -1)
+		if(L_Grid[startPosX][startPosX + 1].isBlocked)
+			L_Grid[startPosX][startPosX + 1].actionRemoved = true;
+		if(L_Grid[1 + startPosX][startPosX].isBlocked)
+			L_Grid[1 + startPosX][startPosX].actionRemoved = true;
+		try {
+			if(L_Grid[startPosX - 1][startPosX].isBlocked)
+				L_Grid[startPosX - 1][startPosX].actionRemoved = true;
+			if(L_Grid[startPosX][startPosX - 1].isBlocked)
+				L_Grid[startPosX][startPosX - 1].actionRemoved = true;
+		}
+		catch(Exception e) {}//in case of out of bound, fail silently.}
+		
+		while(curr.xCoor != this.goalPosX || curr.yCoor != this.goalPosY)
 		{
 			counter++;
 			open.clear();
@@ -245,18 +261,18 @@ public class L_Grid
 			switch(ver)
 			{
 				case 'b':
-					L_Grid[x_size - 1][x_size -1].gVal = 0;
+					L_Grid[this.goalPosX][this.goalPosY].gVal = 0;
 					L_Grid[curr.xCoor][curr.yCoor].gVal = Double.POSITIVE_INFINITY;
-					open.add(L_Grid[x_size - 1][x_size -1]);
+					open.insert(L_Grid[this.goalPosX][this.goalPosY]);
 					success = computePath(ver, curr.xCoor, curr.yCoor);
 					break;
 				case 'a':
 				case 'f':
 				default:
 					L_Grid[curr.xCoor][curr.yCoor].gVal = 0;
-					L_Grid[x_size-1][x_size-1].gVal = Double.POSITIVE_INFINITY;
-					open.add(L_Grid[curr.xCoor][curr.yCoor]);
-					success = computePath(ver, x_size-1, x_size-1);
+					L_Grid[this.goalPosX][goalPosY].gVal = Double.POSITIVE_INFINITY;
+					open.insert(L_Grid[curr.xCoor][curr.yCoor]);
+					success = computePath(ver, goalPosX, goalPosY);
 					break;
 			}
 			if(!success)
@@ -267,12 +283,12 @@ public class L_Grid
 				return;
 			}
 			if(ver == 'a')
-				closed.forEach((n) -> n.hVal = L_Grid[x_size - 1][x_size - 1].gVal - n.gVal);
+				closed.forEach((n) -> n.hVal = L_Grid[goalPosX][goalPosY].gVal - n.gVal);
 			switch(ver)
 			{
 				case 'b':
 					L_Cell advance = L_Grid[curr.xCoor][curr.yCoor];
-					while(!(advance.xCoor == x_size-1 && advance.yCoor == x_size-1))
+					while(!(advance.xCoor == goalPosX && advance.yCoor == goalPosY))
 					{
 						L_Cell further = advance.next;
 						further.prev = advance;
@@ -282,7 +298,7 @@ public class L_Grid
 				case 'a':
 				case 'f':
 				default:
-					L_Cell backtrack = L_Grid[x_size - 1][x_size -1];
+					L_Cell backtrack = L_Grid[goalPosX][goalPosY];
 					while(backtrack != curr)
 					{
 						L_Cell prior = backtrack.prev;
@@ -293,10 +309,12 @@ public class L_Grid
 			}
 			
 			L_Cell ptr = curr;
-			L_Cell prev = curr;
 			L_Cell agentStart = curr;
 			System.out.print(",("+ptr.xCoor + "," + ptr.yCoor+")");
-			while(ptr != null && (ptr.xCoor != x_size -1 || ptr.yCoor != x_size-1) && !ptr.isBlocked)
+			if(ptr.xCoor == 2 && ptr.yCoor == 4) {
+				this.toString();
+			}
+			while(ptr != null && (ptr.xCoor != goalPosX || ptr.yCoor != goalPosY) && !ptr.isBlocked)
 			{
 				if(ptr.next == null) 
 					{ptr.toString();}
@@ -322,9 +340,9 @@ public class L_Grid
 						this.newBlockedCells.add(new int[] {ptr.xCoor, ptr.yCoor - 1} );
 					}
 				ptr = ptr.next;
-				if(ptr == L_Grid[x_size-1][y_size-1]) {
+				if(ptr == L_Grid[goalPosX][goalPosY]) {
 					this.toString();
-					curr = L_Grid[x_size-1][y_size-1];
+					curr = L_Grid[goalPosX][goalPosY];
 				}
 				System.out.print(",("+ptr.xCoor + "," + ptr.yCoor+")");
 			}
@@ -332,10 +350,10 @@ public class L_Grid
 			L_Cell agentEnd = null;
 			if(ptr.isBlocked)
 				agentEnd = ptr.prev;
-			if(curr == L_Grid[x_size-1][y_size-1]){
-				agentEnd = L_Grid[x_size-1][y_size-1];
+			if(curr == L_Grid[goalPosX][goalPosY]){
+				agentEnd = L_Grid[goalPosX][goalPosY];
 			}
-			agent.addToVisualization(agentStart, agentEnd, newBlockedCells, this.numberOfExpandedCells);
+			agent.addToVisualization(agentStart, agentEnd, newBlockedCells, ptr ,this.numberOfExpandedCells, this);
 			this.newBlockedCells.clear();
 			if(ptr.isBlocked)
 				curr = ptr.prev;

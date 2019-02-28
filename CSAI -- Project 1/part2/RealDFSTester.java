@@ -13,7 +13,7 @@ import Part0.Maze;
 
 public class RealDFSTester {
 	public static void main(String[] args) throws IOException {
-		String filePath = "realGrid1.txt";
+		String filePath = "realGrid0.txt";
 		File f = new File(filePath);
 		FileReader fr = new FileReader(filePath);
 		Maze maze = Maze.createNewMaze(101, 101);
@@ -36,18 +36,21 @@ public class RealDFSTester {
 		System.out.println(maze.getRender());
 		
 		RepeatedAStarAgent agent = new RepeatedAStarAgent(new Game(maze));
-		agent.Run('f', 'l');
+		agent.Run('f', 's');
 		
 		
 		FileWriter fw = new FileWriter("realGrid0Visualization.txt");
 		
 		agent.history.forEach((s) -> {
 			try {
-				fw.write(s);
+				fw.write(s + "\r\n");
+				fw.flush();
+				fw.flush();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 	});
 	}
 }

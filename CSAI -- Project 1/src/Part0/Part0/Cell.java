@@ -9,6 +9,8 @@ public class Cell implements Serializable{
 	private static final long serialVersionUID = -4687250664459748573L;
 	public CellStatus status = Unblocked;
 	public int[] coordinates = {0,0};
+	public boolean undetected = true;
+	public boolean onPath = false;
 	private Maze parentMaze;
 	public Cell(Maze parentMaze, int xCoordinate, int yCoordinate) {
 		this.parentMaze = parentMaze;

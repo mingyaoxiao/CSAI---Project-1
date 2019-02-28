@@ -244,7 +244,7 @@ public class BackwardGrid
 							agentEnd = grid[x_size-1][y_size-1];
 						}
 						try {
-						agent.addToVisualization(agentStart, agentEnd, newBlockedCells, this.numberOfExpandedCells);
+						//agent.addToVisualization(agentStart, agentEnd, newBlockedCells, this.numberOfExpandedCells, this);
 						}
 						catch (Exception e) {
 							e.printStackTrace();

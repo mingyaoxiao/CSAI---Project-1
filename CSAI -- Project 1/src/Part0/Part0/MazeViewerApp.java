@@ -166,7 +166,7 @@ public class MazeViewerApp {
 		
 	}
 	
-	private static void viewMazesState(String folderPath) {
+	public static void viewMazesState(String folderPath) {
 		MazeViewer mV = new MazeViewer();
 		mV.loadMazes(folderPath);
 		mV.resetCursor();

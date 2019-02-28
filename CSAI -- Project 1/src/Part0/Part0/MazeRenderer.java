@@ -17,6 +17,7 @@ public class MazeRenderer {
 				int[] currentPos = new int[] {i,j};
 				Cell currentCell = maze.getCellAtCoordinates(currentPos);
 				if(currentCell.status==Agent) {
+					//renderString.append("\u2573");
 					renderString.append("A");
 					continue;
 				}
@@ -25,15 +26,24 @@ public class MazeRenderer {
 					continue;
 				}
 				else if(currentCell.status == Start) {
-					renderString.append("S");
+					renderString.append("B");
 				}
-				else if(currentCell.status == OnPath) {
-					renderString.append("+");
+				else if(currentCell.onPath) {
+					renderString.append("\u2573");
 				}
-				else if (currentCell.status == Blocked) renderString.append("\u25A0");
-				else if (currentCell.status == Unblocked) renderString.append("\u25A1");
+				else if (currentCell.status == Blocked) {
+					if(currentCell.undetected) {
+						renderString.append("\u2592");
+						//System.out.println("really undetected");
+					}
+					else {
+						renderString.append("\u2593"); //25A0
+						//System.out.println("really detected");
+					}
+				}
+				else if (currentCell.status == Unblocked) renderString.append("\u2591"); //25A1
 			}
-			renderString.append("\n");
+			renderString.append("\r\n");
 		}
 		return renderString;
 	}

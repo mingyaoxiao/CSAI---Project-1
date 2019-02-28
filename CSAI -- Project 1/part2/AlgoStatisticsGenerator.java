@@ -15,6 +15,11 @@ import Part0.Maze;
 
 public class AlgoStatisticsGenerator {
 	public static void main(String[] args) throws IOException {
+		String folderLocation = "demo";
+		generateAlgos(folderLocation);
+	}
+	
+	public static void generateAlgos(String folderLocation) throws IOException {
 		Instant.now();
 		// Create arrays to hold the information
 		List<Integer> numberExpandedArray = new ArrayList<Integer>();
@@ -24,11 +29,10 @@ public class AlgoStatisticsGenerator {
 		List<String> completableMazes = new ArrayList<String>();
 		
 		// Get the mazes into an array
-		String folderLocation = "src/stat/";
 		File folder = new File(folderLocation);
 		if(!folder.isDirectory()) return;
-		//for(int i = 0; i < 4; i++) {
-		int i = 3;
+		for(int i = 0; i < 4; i++) {
+		//int i = 3;
 	    File[] files = folder.listFiles();
 	    for (File file : files)
 	    {
@@ -78,7 +82,7 @@ public class AlgoStatisticsGenerator {
 		    		}
 		        }
 		    }
-	//	}
+		}
 		
 		FileWriter fw = null;
 	    BufferedWriter bw = null;
